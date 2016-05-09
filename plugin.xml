@@ -38,7 +38,11 @@
             
         </config-file>
         
-        <source-file src="src/android/*.*" target-dir="src/com/hpe/android/plugin/backgroundservice" />
+        <source-file src="src/android/MyService.java" target-dir="src/com/hpe/android/plugin/backgroundservice" />
+		<source-file src="src/android/db/AccountInfoDbAdapter.java" target-dir="src/com/hpe/android/plugin/backgroundservice/db" />
+		<source-file src="src/android/db/AccountInfoDbAdapterImpl.java" target-dir="src/com/hpe/android/plugin/backgroundservice/db" />
+		<source-file src="src/android/db/DatabaseHelper.java" target-dir="src/com/hpe/android/plugin/backgroundservice/db" />
+		<source-file src="src/android/db/DatabaseHelperImpl.java" target-dir="src/com/hpe/android/plugin/backgroundservice/db" />
     </platform>
 	
 </plugin>
