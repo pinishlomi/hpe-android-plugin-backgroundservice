@@ -37,19 +37,43 @@
             </service>
             
         </config-file>
-        
+        <!-- MyService -->
         <source-file src="src/android/MyService.java" target-dir="src/com/hpe/android/plugin/backgroundservice" />
+		<!-- data -->
+		<source-file src="src/android/data/Entity.java" target-dir="src/com/hpe/android/plugin/backgroundservice/data" />
+		<source-file src="src/android/data/Group.java" target-dir="src/com/hpe/android/plugin/backgroundservice/data" />
+		<source-file src="src/android/data/Monitor.java" target-dir="src/com/hpe/android/plugin/backgroundservice/data" />
+		<source-file src="src/android/data/SiteScopeServer.java" target-dir="src/com/hpe/android/plugin/backgroundservice/data" />
+		<source-file src="src/android/data/SiteScopeServerHelper.java" target-dir="src/com/hpe/android/plugin/backgroundservice/data" />
+		<!-- db -->
 		<source-file src="src/android/db/AccountInfoDbAdapter.java" target-dir="src/com/hpe/android/plugin/backgroundservice/db" />
 		<source-file src="src/android/db/AccountInfoDbAdapterImpl.java" target-dir="src/com/hpe/android/plugin/backgroundservice/db" />
 		<source-file src="src/android/db/DatabaseHelper.java" target-dir="src/com/hpe/android/plugin/backgroundservice/db" />
 		<source-file src="src/android/db/DatabaseHelperImpl.java" target-dir="src/com/hpe/android/plugin/backgroundservice/db" />
-		<source-file src="src/android/data/Entity.java" target-dir="src/com/hpe/android/plugin/backgroundservice/data" />
-		<source-file src="src/android/data/SiteScopeServer.java" target-dir="src/com/hpe/android/plugin/backgroundservice/data" />
-		<source-file src="src/android/data/FavoritesList.java" target-dir="src/com/hpe/android/plugin/backgroundservice/data" />
-		<source-file src="src/android/data/Group.java" target-dir="src/com/hpe/android/plugin/backgroundservice/data" />
-		<source-file src="src/android/data/Monitor.java" target-dir="src/com/hpe/android/plugin/backgroundservice/data" />
-		<source-file src="src/android/data/MonitorHelper.java" target-dir="src/com/hpe/android/plugin/backgroundservice/data" />
-		<source-file src="src/android/soap/SoapCalls.java" target-dir="src/com/hpe/android/plugin/backgroundservice/data" />
+		<!-- rest -->
+		<!--       request -->
+		<source-file src="src/android/rest/request/AbstractRestRequest.java" target-dir="src/com/hpe/android/plugin/backgroundservice/rest/request" />
+		<source-file src="src/android/rest/request/GetGroupSnapshotsRequest.java" target-dir="src/com/hpe/android/plugin/backgroundservice/rest/request" />
+		<source-file src="src/android/rest/request/GetMonitorSnapshotsRequest.java" target-dir="src/com/hpe/android/plugin/backgroundservice/rest/request" />
+		<source-file src="src/android/rest/request/GetSiteScopeMonitoringStatusWithIdentifierRequest.java" target-dir="src/com/hpe/android/plugin/backgroundservice/rest/request" />
+		<source-file src="src/android/rest/request/SearchRequest.java" target-dir="src/com/hpe/android/plugin/backgroundservice/rest/request" />
+		<!--       response -->
+		<source-file src="src/android/rest/response/AbstractRestResponse.java" target-dir="src/com/hpe/android/plugin/backgroundservice/rest/response" />
+		<source-file src="src/android/rest/response/GetGroupSnapshotsResponse.java" target-dir="src/com/hpe/android/plugin/backgroundservice/rest/response" />
+		<source-file src="src/android/rest/response/GetMonitorSnapshotsResponse.java" target-dir="src/com/hpe/android/plugin/backgroundservice/rest/response" />
+		<source-file src="src/android/rest/response/GetSiteScopeMonitoringStatusWithIdentifierResponse.java" target-dir="src/com/hpe/android/plugin/backgroundservice/rest/response" />
+		<source-file src="src/android/rest/response/SearchResponse.java" target-dir="src/com/hpe/android/plugin/backgroundservice/rest/response" />
+		
+		<source-file src="src/android/rest/GetMonitorSnapshots.java" target-dir="src/com/hpe/android/plugin/backgroundservice/rest" />
+		<source-file src="src/android/rest/RestCall.java" target-dir="src/com/hpe/android/plugin/backgroundservice/rest" />
+		<source-file src="src/android/rest/RestCalls.java" target-dir="src/com/hpe/android/plugin/backgroundservice/rest" />
+		<source-file src="src/android/rest/Timer.java" target-dir="src/com/hpe/android/plugin/backgroundservice/rest" />
+		
+		<!-- tasks -->
+		<source-file src="src/android/tasks/AbstractTimedAsyncTask.java" target-dir="src/com/hpe/android/plugin/backgroundservice/tasks" />
+		
+		<!-- utils -->
+		<source-file src="src/android/utils/SiteScopeError.java" target-dir="src/com/hpe/android/plugin/backgroundservice/utils" />
 		
     </platform>
 	
