@@ -38,7 +38,7 @@
             
         </config-file>
         
-        <source-file src="src/android/MyService.java" target-dir="src/com/hpe/android/plugin/backgroundservice" />
+        <source-file src="src/android/*.*" target-dir="src/com/hpe/android/plugin/backgroundservice" />
     </platform>
 	
 </plugin>
