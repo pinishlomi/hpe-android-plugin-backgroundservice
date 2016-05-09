@@ -8,15 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import android.data.Entity;
-import android.data.Group;
-import android.data.Monitor;
-import com.hpe.hybridsitescope.data.MonitorHelper;
 import android.data.SiteScopeServer;
-
-import android.rest.RestCalls;
-
-import java.util.Vector;
-
 /**
  * Account info database access helper class. Defines the basic CRUD operations
  * and gives the ability to list all account info values as well as
@@ -24,7 +16,7 @@ import java.util.Vector;
  * 
  * This also handles the Favorites table.
  */
-public class AccountInfoDbAdapterImpl implements android.db.AccountInfoDbAdapter {
+public class AccountInfoDbAdapterImpl implements AccountInfoDbAdapter {
 
 	private static final String TAG = AccountInfoDbAdapterImpl.class.getSimpleName();
     public static final String FAVES_DATABASE_TABLE = "favorites";
