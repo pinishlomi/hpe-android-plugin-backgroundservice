@@ -14,13 +14,13 @@ import com.hpe.android.plugin.backgroundservice.data.SiteScopeServer;
  * Account info database access helper class. Defines the basic CRUD operations
  * and gives the ability to list all account info values as well as
  * retrieve or modify a specific account info item.
- * 
+ *
  * This also handles the Favorites table.
  */
 public class AccountInfoDbAdapterImpl implements AccountInfoDbAdapter {
 
 	private static final String TAG = AccountInfoDbAdapterImpl.class.getSimpleName();
-    public static final String FAVES_DATABASE_TABLE = "favorites";
+    public static final String FAVES_DATABASE_TABLE = "ITEMS";
 
 	private DatabaseHelperImpl mDbHelper;
 	private SQLiteDatabase mDb;
@@ -99,7 +99,7 @@ public class AccountInfoDbAdapterImpl implements AccountInfoDbAdapter {
 		long result = mDb.update(DATABASE_TABLE, initialValues, KEY_ROWID + "=" + rowId, null);
 		close();
 		return  result;
-	}    
+	}
 
 	public long insertAccount(String host, String port, String protocol, String allowUntrustedCerts, String username, String password, String displayname) {
 		open();
@@ -172,7 +172,7 @@ public class AccountInfoDbAdapterImpl implements AccountInfoDbAdapter {
 		}
 		close();
 		return mCursor;
-	}    
+	}
 
 	public long insertFavorite(
 			String ssAcct,
