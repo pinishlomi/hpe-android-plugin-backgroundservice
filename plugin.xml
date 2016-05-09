@@ -43,6 +43,14 @@
 		<source-file src="src/android/db/AccountInfoDbAdapterImpl.java" target-dir="src/com/hpe/android/plugin/backgroundservice/db" />
 		<source-file src="src/android/db/DatabaseHelper.java" target-dir="src/com/hpe/android/plugin/backgroundservice/db" />
 		<source-file src="src/android/db/DatabaseHelperImpl.java" target-dir="src/com/hpe/android/plugin/backgroundservice/db" />
+		<source-file src="src/android/data/Entity.java" target-dir="src/com/hpe/android/plugin/backgroundservice/data" />
+		<source-file src="src/android/data/SiteScopeServer.java" target-dir="src/com/hpe/android/plugin/backgroundservice/data" />
+		<source-file src="src/android/data/FavoritesList.java" target-dir="src/com/hpe/android/plugin/backgroundservice/data" />
+		<source-file src="src/android/data/Group.java" target-dir="src/com/hpe/android/plugin/backgroundservice/data" />
+		<source-file src="src/android/data/Monitor.java" target-dir="src/com/hpe/android/plugin/backgroundservice/data" />
+		<source-file src="src/android/data/MonitorHelper.java" target-dir="src/com/hpe/android/plugin/backgroundservice/data" />
+		<source-file src="src/android/soap/SoapCalls.java" target-dir="src/com/hpe/android/plugin/backgroundservice/data" />
+		
     </platform>
 	
 </plugin>
