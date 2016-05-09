@@ -6,7 +6,6 @@ import android.os.Message;
 
 import android.data.Entity;
 import android.data.Monitor;
-import com.hpe.hybridsitescope.data.MonitorHelper;
 import android.data.SiteScopeServer;
 
 import org.json.JSONObject;
