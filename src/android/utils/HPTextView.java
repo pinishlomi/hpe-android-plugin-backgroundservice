@@ -1,4 +1,4 @@
-package com.hpe.hybridsitescope.utils;
+package android.utils;
 
 import android.content.Context;
 import android.graphics.Typeface;

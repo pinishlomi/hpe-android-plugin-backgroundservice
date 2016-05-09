@@ -1,13 +1,13 @@
-package com.hpe.hybridsitescope.data;
+package android.data;
 
-import com.hpe.hybridsitescope.soap.SoapCalls;
+import android.rest.RestCalls;
 
 @SuppressWarnings("serial")
-public class Group extends Entity{
+public class Group extends Entity {
 
-	public Group(SiteScopeServer siteScopeServer) {
+	public Group(android.data.SiteScopeServer siteScopeServer) {
 		super(siteScopeServer);
-        setEntityType(SoapCalls.GROUP_ENITYTYPE);
+        setEntityType(RestCalls.GROUP_ENITYTYPE);
 	}
 
 }

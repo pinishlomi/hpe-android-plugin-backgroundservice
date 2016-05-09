@@ -1,4 +1,4 @@
-package com.hpe.hybridsitescope.db;
+package android.db;
 
 import android.database.sqlite.SQLiteDatabase;
 

@@ -1,9 +1,9 @@
-package com.hpe.hybridsitescope.data;
+package android.data;
 
-import com.hpe.hybridsitescope.soap.SoapCalls;
+import android.rest.RestCalls;
 
 @SuppressWarnings("serial")
-public class Monitor extends Entity{
+public class Monitor extends Entity {
 	
 	private String targetIp;	
 	private String targetName;
@@ -11,9 +11,9 @@ public class Monitor extends Entity{
 	private String targetDisplayName;
 	private boolean availability;
 	
-	public Monitor(SiteScopeServer siteScopeServer) {
+	public Monitor(android.data.SiteScopeServer siteScopeServer) {
 		super(siteScopeServer);
-        setEntityType(SoapCalls.MONITOR_ENITYTYPE);
+        setEntityType(RestCalls.MONITOR_ENITYTYPE);
 	}
 
     public boolean getAvailability() {

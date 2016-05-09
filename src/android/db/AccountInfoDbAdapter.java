@@ -1,10 +1,10 @@
-package com.hpe.hybridsitescope.db;
+package android.db;
 
 import android.database.Cursor;
 import android.database.SQLException;
 
-import com.hpe.hybridsitescope.data.Entity;
-import com.hpe.hybridsitescope.data.SiteScopeServer;
+import android.data.Entity;
+import android.data.SiteScopeServer;
 
 /**
  * Created by IntelliJ IDEA.

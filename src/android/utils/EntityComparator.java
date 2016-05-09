@@ -1,6 +1,6 @@
-package com.hpe.hybridsitescope.utils;
+package android.utils;
 
-import com.hpe.hybridsitescope.data.Entity;
+import android.data.Entity;
 
 import java.util.Comparator;
 

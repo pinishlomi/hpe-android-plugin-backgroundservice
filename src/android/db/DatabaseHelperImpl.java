@@ -1,4 +1,4 @@
-package com.hpe.hybridsitescope.db;
+package android.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,24 +16,24 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements DatabaseHelp
     public static final String TAG = DatabaseHelperImpl.class.getSimpleName();
 
     public DatabaseHelperImpl(Context context) {
-        super(context, AccountInfoDbAdapter.DATABASE_NAME, null, AccountInfoDbAdapter.DATABASE_VERSION);
+        super(context, android.db.AccountInfoDbAdapter.DATABASE_NAME, null, android.db.AccountInfoDbAdapter.DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL(AccountInfoDbAdapter.DATABASE_CREATE);
-        db.execSQL(AccountInfoDbAdapter.FAVES_DATABASE_CREATE);
-        db.execSQL(AccountInfoDbAdapter.SETTING_DATABASE_CREATE);
+        db.execSQL(android.db.AccountInfoDbAdapter.DATABASE_CREATE);
+        db.execSQL(android.db.AccountInfoDbAdapter.FAVES_DATABASE_CREATE);
+        db.execSQL(android.db.AccountInfoDbAdapter.SETTING_DATABASE_CREATE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
                 + newVersion + ", which will destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS " + AccountInfoDbAdapter.DATABASE_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + AccountInfoDbAdapter.FAVES_DATABASE_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + AccountInfoDbAdapter.SETTING_DATABASE_CREATE);
+        db.execSQL("DROP TABLE IF EXISTS " + android.db.AccountInfoDbAdapter.DATABASE_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + android.db.AccountInfoDbAdapter.FAVES_DATABASE_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + android.db.AccountInfoDbAdapter.SETTING_DATABASE_CREATE);
         onCreate(db);
     }
 }

@@ -1,4 +1,4 @@
-package com.hpe.hybridsitescope.data;
+package android.data;
 
 public class SiteScopeServerHelper {
 

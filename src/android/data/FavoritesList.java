@@ -1,9 +1,9 @@
-package com.hpe.hybridsitescope.data;
+package android.data;
 
 import android.content.Context;
 import android.util.Log;
 
-import com.hpe.hybridsitescope.db.AccountInfoDbAdapterImpl;
+import android.db.AccountInfoDbAdapterImpl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,19 +17,19 @@ import java.util.concurrent.ConcurrentHashMap;
  * Favorites list singleton
  *
  */
-public class FavoritesList extends Observable implements List<Entity> {
+public class FavoritesList extends Observable implements List<android.data.Entity> {
     public static final String TAG = FavoritesList.class.getSimpleName();
 
-	List<Entity> favoritesList;
+	List<android.data.Entity> favoritesList;
 	private static FavoritesList instance;
 
 
     private AccountInfoDbAdapterImpl mDbHelper;
 
-    private final Map<SiteScopeServer, Boolean> refreshServerErrorMap = new ConcurrentHashMap<SiteScopeServer, Boolean>();
+    private final Map<android.data.SiteScopeServer, Boolean> refreshServerErrorMap = new ConcurrentHashMap<android.data.SiteScopeServer, Boolean>();
 
 
-    public final boolean getRefreshError(SiteScopeServer server) {
+    public final boolean getRefreshError(android.data.SiteScopeServer server) {
         if (server != null) {
             final Boolean err = refreshServerErrorMap.get(server);
             if (err != null) {
@@ -42,7 +42,7 @@ public class FavoritesList extends Observable implements List<Entity> {
     private boolean isAllServersInError() {
         if (refreshServerErrorMap.size() == 0) return false;
 
-        for (Map.Entry<SiteScopeServer, Boolean> entry : refreshServerErrorMap.entrySet()) {
+        for (Map.Entry<android.data.SiteScopeServer, Boolean> entry : refreshServerErrorMap.entrySet()) {
             if (entry != null) {
                 Boolean isError = entry.getValue();
                 if (!isError) return false;
@@ -56,13 +56,13 @@ public class FavoritesList extends Observable implements List<Entity> {
         notifyObservers();
     }
 
-    public final void setRefreshError(SiteScopeServer server, boolean error) {
+    public final void setRefreshError(android.data.SiteScopeServer server, boolean error) {
         if (server != null) refreshServerErrorMap.put(server, Boolean.valueOf(error));
     }
 
-    public void applyErrorToEntityAtServer(String errorMessage, String entityType, SiteScopeServer siteScopeServer) {
+    public void applyErrorToEntityAtServer(String errorMessage, String entityType, android.data.SiteScopeServer siteScopeServer) {
         Log.d(TAG, String.format("Applying %s to entityType=%s at %s", errorMessage, entityType, siteScopeServer.getUrl()));
-        for (Entity entity : favoritesList) {
+        for (android.data.Entity entity : favoritesList) {
             if (entity.getEntityType().equals(entityType) && entity.getSiteScopeServer().equals(siteScopeServer)) {
                 entity.setErrorMsg(errorMessage);
             }
@@ -72,7 +72,7 @@ public class FavoritesList extends Observable implements List<Entity> {
     }
 
 	private FavoritesList(Context context) {
-		this.favoritesList = new ArrayList<Entity>();
+		this.favoritesList = new ArrayList<android.data.Entity>();
         mDbHelper = new AccountInfoDbAdapterImpl(context.getApplicationContext());
 	}
 
@@ -82,7 +82,7 @@ public class FavoritesList extends Observable implements List<Entity> {
 		return instance;
 	}
 	
-	public void add(Entity entity, boolean update) {
+	public void add(android.data.Entity entity, boolean update) {
 
 		//in all cases, add favorite to the database
 		
@@ -130,7 +130,7 @@ public class FavoritesList extends Observable implements List<Entity> {
 		}
 	}
 	
-	public void updateEntity(Entity object) 
+	public void updateEntity(android.data.Entity object)
 	{	
 		//another way of doing a replace
 		int existingFavePos = this.itemWithBaseInfo(object.getName(), object.getSiteScopeServer().getName(), object.getClass().getSimpleName(), object.getFullPath());
@@ -141,15 +141,15 @@ public class FavoritesList extends Observable implements List<Entity> {
 		}
 	}
 
-    public void bunchUpdate(List<? extends Entity> entities, boolean setFavorite) {
-        for (Entity entity : entities) {
+    public void bunchUpdate(List<? extends android.data.Entity> entities, boolean setFavorite) {
+        for (android.data.Entity entity : entities) {
             if(setFavorite) entity.setFavorite(true);
             updateEntity(entity);
         }
     }
 
 	@Override
-	public void add(int location, Entity object) {
+	public void add(int location, android.data.Entity object) {
 		//do not allow duplicates to be added
 		if(this.get(object)!=null)
 			return;
@@ -158,12 +158,12 @@ public class FavoritesList extends Observable implements List<Entity> {
         notifyObservers();		
 	}
 	
-	public boolean addAllForRefresh(Collection<? extends Entity> c) {
+	public boolean addAllForRefresh(Collection<? extends android.data.Entity> c) {
 		return favoritesList.addAll(c);
  	}
 
 	@Override
-	public boolean addAll(Collection<? extends Entity> c) {
+	public boolean addAll(Collection<? extends android.data.Entity> c) {
 		boolean result = favoritesList.addAll(c);
         if(result) {
         	setChanged();
@@ -173,7 +173,7 @@ public class FavoritesList extends Observable implements List<Entity> {
 	}
 
 	@Override
-	public boolean addAll(int position, Collection<? extends Entity> c) {
+	public boolean addAll(int position, Collection<? extends android.data.Entity> c) {
 		boolean result = favoritesList.addAll(position, c);
         if(result) {
         	setChanged();
@@ -194,14 +194,14 @@ public class FavoritesList extends Observable implements List<Entity> {
 		favoritesList.clear();
 	}
 
-    public Entity getEntityForAlertTriger(Entity object) {
-        Entity entity = object;
+    public android.data.Entity getEntityForAlertTriger(android.data.Entity object) {
+        android.data.Entity entity = object;
         boolean isEqual = false;
-        Iterator<Entity> iterator = this.favoritesList.iterator();
-        Entity entityInFave = null;
+        Iterator<android.data.Entity> iterator = this.favoritesList.iterator();
+        android.data.Entity entityInFave = null;
         while(iterator.hasNext()){
             isEqual = true;
-            entityInFave = (Entity)iterator.next();
+            entityInFave = (android.data.Entity)iterator.next();
             if(!entityInFave.getFullPath().equals(entity.getFullPath()))
             {
                 isEqual = false;
@@ -226,15 +226,15 @@ public class FavoritesList extends Observable implements List<Entity> {
         else
             return null;
     }
-        public Entity get(Entity object) {
-		Entity entity = object;
+        public android.data.Entity get(android.data.Entity object) {
+		android.data.Entity entity = object;
 		boolean isEqual = false;
-		Iterator<Entity> iterator = this.favoritesList.iterator();
-		Entity entityInFave = null;
+		Iterator<android.data.Entity> iterator = this.favoritesList.iterator();
+		android.data.Entity entityInFave = null;
 		while(iterator.hasNext())
 		{
 			isEqual = true;
-			entityInFave = (Entity)iterator.next();
+			entityInFave = (android.data.Entity)iterator.next();
 			if(object.getErrorMsg()!=null)
 			{
 				isEqual = false;
@@ -365,12 +365,12 @@ public class FavoritesList extends Observable implements List<Entity> {
 	public boolean itemWithBaseInfoExists(String name, String ssAccount, String type, String fullPath) {
 		
 		boolean isEqual = false;
-		Iterator<Entity> iterator = this.favoritesList.iterator();
-		Entity entityInFave = null;
+		Iterator<android.data.Entity> iterator = this.favoritesList.iterator();
+		android.data.Entity entityInFave = null;
 		while(iterator.hasNext())
 		{
 			isEqual = true;
-			entityInFave = (Entity)iterator.next();
+			entityInFave = (android.data.Entity)iterator.next();
 			
 			if(!entityInFave.getFullPath().equals(fullPath))
 			{
@@ -401,15 +401,15 @@ public class FavoritesList extends Observable implements List<Entity> {
 	public int itemWithBaseInfo(String name, String ssAccount, String type, String fullPath) {
 		
 		boolean isEqual = false;
-		Iterator<Entity> iterator = this.favoritesList.iterator();
-		Entity entityInFave = null;
+		Iterator<android.data.Entity> iterator = this.favoritesList.iterator();
+		android.data.Entity entityInFave = null;
 		int position = -1;
 		int count = -1;
 		while(iterator.hasNext())
 		{		
 			count++;
 			isEqual = true;
-			entityInFave = (Entity)iterator.next();
+			entityInFave = (android.data.Entity)iterator.next();
 			
 			if(!entityInFave.getFullPath().equals(fullPath))
 			{
@@ -446,7 +446,7 @@ public class FavoritesList extends Observable implements List<Entity> {
 	}
 
 	@Override
-	public Entity get(int location) {
+	public android.data.Entity get(int location) {
 		return favoritesList.get(location);
 	}
 	
@@ -470,7 +470,7 @@ public class FavoritesList extends Observable implements List<Entity> {
 	}
 
 	@Override
-	public Iterator<Entity> iterator() {
+	public Iterator<android.data.Entity> iterator() {
 		return favoritesList.iterator();
 	}
 
@@ -480,29 +480,29 @@ public class FavoritesList extends Observable implements List<Entity> {
 	}
 
 	@Override
-	public ListIterator<Entity> listIterator() {
+	public ListIterator<android.data.Entity> listIterator() {
 		return favoritesList.listIterator();
 	}
 
 	@Override
-	public ListIterator<Entity> listIterator(int position) {
+	public ListIterator<android.data.Entity> listIterator(int position) {
 		return favoritesList.listIterator(position);
 	}
 
 	@Override
-	public Entity remove(int position) {
-		Entity result = favoritesList.remove(position);
+	public android.data.Entity remove(int position) {
+		android.data.Entity result = favoritesList.remove(position);
         setChanged();
         notifyObservers();
         return result;
 	}
 	
-	public Entity removeNoUpdate(int position) {
-		Entity result = favoritesList.remove(position);        
+	public android.data.Entity removeNoUpdate(int position) {
+		android.data.Entity result = favoritesList.remove(position);
         return result;
 	}
 	
-	public void remove(Entity entity, boolean update) {
+	public void remove(android.data.Entity entity, boolean update) {
 		
 		boolean result = mDbHelper.deleteFavorite(entity);
         if (result && update && entity != null) {
@@ -533,8 +533,8 @@ public class FavoritesList extends Observable implements List<Entity> {
 	}
 
 	@Override
-	public Entity set(int position, Entity monitor) {
-		Entity result = favoritesList.set(position, monitor);
+	public android.data.Entity set(int position, android.data.Entity monitor) {
+		android.data.Entity result = favoritesList.set(position, monitor);
 		setChanged();
 		notifyObservers();
 		return result;
@@ -546,7 +546,7 @@ public class FavoritesList extends Observable implements List<Entity> {
 	}
 
 	@Override
-	public List<Entity> subList(int fromPosition, int toPosition) {
+	public List<android.data.Entity> subList(int fromPosition, int toPosition) {
 		return favoritesList.subList(fromPosition, toPosition);
 	}
 
@@ -571,7 +571,7 @@ public class FavoritesList extends Observable implements List<Entity> {
 	}
 
 	@Override
-	public boolean add(Entity object) {		
+	public boolean add(android.data.Entity object) {
 		return favoritesList.add(object);
 	}
 
@@ -585,8 +585,8 @@ public class FavoritesList extends Observable implements List<Entity> {
 										   String oldProtocol,String protocol,
 										   Boolean allowUntrustedCerts, String displayName, String userName, String password) {
         if (host != null && port != null && protocol != null) {
-            for (Entity entity : favoritesList) {
-                final SiteScopeServer siteScopeServer = entity.getSiteScopeServer();
+            for (android.data.Entity entity : favoritesList) {
+                final android.data.SiteScopeServer siteScopeServer = entity.getSiteScopeServer();
                 if (siteScopeServer != null) {
                     if (	siteScopeServer.getHost().equalsIgnoreCase(oldHost)
 							&& siteScopeServer.getPort().equalsIgnoreCase(oldPort)

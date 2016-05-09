@@ -1,4 +1,4 @@
-package com.hpe.hybridsitescope.data;
+package android.data;
 
 import java.io.Serializable;
 

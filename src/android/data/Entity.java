@@ -1,4 +1,4 @@
-package com.hpe.hybridsitescope.data;
+package android.data;
 
 
 import java.io.Serializable;
@@ -32,7 +32,7 @@ public class Entity implements Serializable{
 	
 	private String errorMsg;
 
-	private com.hpe.hybridsitescope.data.SiteScopeServer siteScopeServer;
+	private SiteScopeServer siteScopeServer;
 
 	public Entity(SiteScopeServer siteScopeServer) {
 		super();

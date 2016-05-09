@@ -1,4 +1,4 @@
-package com.hpe.hybridsitescope.db;
+package android.db;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,13 +7,14 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.hpe.hybridsitescope.data.Entity;
-import com.hpe.hybridsitescope.data.FavoritesList;
-import com.hpe.hybridsitescope.data.Group;
-import com.hpe.hybridsitescope.data.Monitor;
+import android.data.Entity;
+import android.data.FavoritesList;
+import android.data.Group;
+import android.data.Monitor;
 import com.hpe.hybridsitescope.data.MonitorHelper;
-import com.hpe.hybridsitescope.data.SiteScopeServer;
-import com.hpe.hybridsitescope.soap.SoapCalls;
+import android.data.SiteScopeServer;
+
+import android.rest.RestCalls;
 
 import java.util.Vector;
 
@@ -24,7 +25,7 @@ import java.util.Vector;
  * 
  * This also handles the Favorites table.
  */
-public class AccountInfoDbAdapterImpl implements AccountInfoDbAdapter {
+public class AccountInfoDbAdapterImpl implements android.db.AccountInfoDbAdapter {
 
 	private static final String TAG = AccountInfoDbAdapterImpl.class.getSimpleName();
     public static final String FAVES_DATABASE_TABLE = "favorites";
@@ -236,14 +237,14 @@ public class AccountInfoDbAdapterImpl implements AccountInfoDbAdapter {
 		final Cursor accountInfoCursor = fetchAccountsList();
 		while(!accountInfoCursor.isAfterLast())
 		{     // The Cursor is now set to the right position
-			String ssAcctName = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_NAME));
+			String ssAcctName = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_NAME));
 			//String siteScopeHost = siteScopeHost;//getIntent().getStringExtra("siteScopeHost");
-			String host = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_HOST));
-			String port = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_PORT));
-			String protocol = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_PROTOCOL));
-			boolean allowUntrustedCerts = Boolean.valueOf(accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_ALLOW_UNTRUSTED_CERTS)));
-			String username = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_USERNAME));
-			String password = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_PASSWORD));
+			String host = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_HOST));
+			String port = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_PORT));
+			String protocol = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_PROTOCOL));
+			boolean allowUntrustedCerts = Boolean.valueOf(accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_ALLOW_UNTRUSTED_CERTS)));
+			String username = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_USERNAME));
+			String password = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_PASSWORD));
 
 			final SiteScopeServer ssServer = new SiteScopeServer(protocol, host, port, username, password, ssAcctName, allowUntrustedCerts);
 
@@ -277,10 +278,10 @@ public class AccountInfoDbAdapterImpl implements AccountInfoDbAdapter {
 		if (favesCursor.getCount() > 0)
 			while(!favesCursor.isAfterLast())
 			{
-				String ssAcctName = favesCursor.getString(favesCursor.getColumnIndex(AccountInfoDbAdapter.PARENT_ID));
-				String entityType = favesCursor.getString(favesCursor.getColumnIndex(AccountInfoDbAdapter.TYPE));
-				String fullPath = favesCursor.getString(favesCursor.getColumnIndex(AccountInfoDbAdapter.FULL_PATH));
-				String target = favesCursor.getString(favesCursor.getColumnIndex(AccountInfoDbAdapter.TARGET_DISPLAY_NAME));
+				String ssAcctName = favesCursor.getString(favesCursor.getColumnIndex(android.db.AccountInfoDbAdapter.PARENT_ID));
+				String entityType = favesCursor.getString(favesCursor.getColumnIndex(android.db.AccountInfoDbAdapter.TYPE));
+				String fullPath = favesCursor.getString(favesCursor.getColumnIndex(android.db.AccountInfoDbAdapter.FULL_PATH));
+				String target = favesCursor.getString(favesCursor.getColumnIndex(android.db.AccountInfoDbAdapter.TARGET_DISPLAY_NAME));
 
 				final Cursor accountInfoCursor = fetchAccountInfo(ssAcctName);
 				if (accountInfoCursor.getCount() == 0) {
@@ -288,15 +289,15 @@ public class AccountInfoDbAdapterImpl implements AccountInfoDbAdapter {
 					continue;
 				}
 
-				String host = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_HOST));
-				String port = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_PORT));
-				String protocol = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_PROTOCOL));
-				boolean allowUntrustedCerts = Boolean.valueOf(accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_ALLOW_UNTRUSTED_CERTS)));
-				String username = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_USERNAME));
-				String password = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_PASSWORD));
+				String host = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_HOST));
+				String port = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_PORT));
+				String protocol = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_PROTOCOL));
+				boolean allowUntrustedCerts = Boolean.valueOf(accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_ALLOW_UNTRUSTED_CERTS)));
+				String username = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_USERNAME));
+				String password = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_PASSWORD));
 				SiteScopeServer ssServer = new SiteScopeServer(protocol, host, port, username, password, ssAcctName, allowUntrustedCerts);
 
-				if(!entityType.equalsIgnoreCase(SoapCalls.GROUP_ENITYTYPE))
+				if(!entityType.equalsIgnoreCase(RestCalls.GROUP_ENITYTYPE))
 				// if is not group so it is monitor and the type is monitor type e.g. "Memory"
 				{
 					Vector<String> paths = new Vector<String>();
@@ -319,7 +320,7 @@ public class AccountInfoDbAdapterImpl implements AccountInfoDbAdapter {
 					//				FavoritesList.getInstance().add(monitor);
 					if(!favoritesList.contains(monitor)) favoritesList.add(monitor);
 				}
-				else if(entityType.equalsIgnoreCase(SoapCalls.GROUP_ENITYTYPE))
+				else if(entityType.equalsIgnoreCase(RestCalls.GROUP_ENITYTYPE))
 				{
 					Vector<String>paths = new Vector<String>();
 					paths.add(fullPath);
@@ -328,7 +329,7 @@ public class AccountInfoDbAdapterImpl implements AccountInfoDbAdapter {
 					group.setFavorite(true); //default is a favorite
 					group.setName(MonitorHelper.getMonitorNameFromFullPath(fullPath));
 					group.setFullPath(fullPath);
-					group.setType(SoapCalls.GROUP_ENITYTYPE);
+					group.setType(RestCalls.GROUP_ENITYTYPE);
 					group.setEntityType(group.getType());
 
 					//Set default status

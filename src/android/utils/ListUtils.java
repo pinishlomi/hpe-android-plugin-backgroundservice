@@ -1,7 +1,7 @@
-package com.hpe.hybridsitescope.utils;
+package android.utils;
 
-import com.hpe.hybridsitescope.data.Entity;
-import com.hpe.hybridsitescope.data.SiteScopeServer;
+import android.data.Entity;
+import android.data.SiteScopeServer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
