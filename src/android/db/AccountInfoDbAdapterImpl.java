@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import android.data.Entity;
-import android.data.FavoritesList;
 import android.data.Group;
 import android.data.Monitor;
 import com.hpe.hybridsitescope.data.MonitorHelper;
@@ -263,87 +262,6 @@ public class AccountInfoDbAdapterImpl implements android.db.AccountInfoDbAdapter
 		if (accountsCursor != null) {
 			return accountsCursor.getCount();
 		} else throw new Exception("accountsCursor can't be null - status_error");
-	}
-
-	/**
-	 * Populates Favorites List singleton
-	 * @return - number of populated records
-	 */
-	@Override
-	public int populateFavoritesList() {
-		Log.d(TAG, "populateFavoritesList() invoked");
-		final Cursor favesCursor = fetchFavoritesList();
-		final FavoritesList favoritesList = FavoritesList.getInstance(context);
-		favoritesList.clearForRefresh();
-		if (favesCursor.getCount() > 0)
-			while(!favesCursor.isAfterLast())
-			{
-				String ssAcctName = favesCursor.getString(favesCursor.getColumnIndex(android.db.AccountInfoDbAdapter.PARENT_ID));
-				String entityType = favesCursor.getString(favesCursor.getColumnIndex(android.db.AccountInfoDbAdapter.TYPE));
-				String fullPath = favesCursor.getString(favesCursor.getColumnIndex(android.db.AccountInfoDbAdapter.FULL_PATH));
-				String target = favesCursor.getString(favesCursor.getColumnIndex(android.db.AccountInfoDbAdapter.TARGET_DISPLAY_NAME));
-
-				final Cursor accountInfoCursor = fetchAccountInfo(ssAcctName);
-				if (accountInfoCursor.getCount() == 0) {
-					favesCursor.moveToNext();
-					continue;
-				}
-
-				String host = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_HOST));
-				String port = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_PORT));
-				String protocol = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_PROTOCOL));
-				boolean allowUntrustedCerts = Boolean.valueOf(accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_ALLOW_UNTRUSTED_CERTS)));
-				String username = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_USERNAME));
-				String password = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_PASSWORD));
-				SiteScopeServer ssServer = new SiteScopeServer(protocol, host, port, username, password, ssAcctName, allowUntrustedCerts);
-
-				if(!entityType.equalsIgnoreCase(RestCalls.GROUP_ENITYTYPE))
-				// if is not group so it is monitor and the type is monitor type e.g. "Memory"
-				{
-					Vector<String> paths = new Vector<String>();
-
-					paths.add(fullPath);
-
-					Monitor monitor = new Monitor(ssServer);
-					monitor.setFavorite(true); //default is a favorite
-					monitor.setName(MonitorHelper.getMonitorNameFromFullPath(fullPath));
-					monitor.setFullPath(fullPath);
-					monitor.setTargetName(target);
-					monitor.setType(entityType);
-					monitor.setStatus(MonitorHelper.STATUS_ERROR);
-
-					monitor.setEntityType(monitor.getType());
-
-					//even though there's an status_error, we still need to add the monitor to the list
-					//and display the status_error to the user
-					//FavoritesList.getInstance().add(monitor, mDbHelper, false);
-					//				FavoritesList.getInstance().add(monitor);
-					if(!favoritesList.contains(monitor)) favoritesList.add(monitor);
-				}
-				else if(entityType.equalsIgnoreCase(RestCalls.GROUP_ENITYTYPE))
-				{
-					Vector<String>paths = new Vector<String>();
-					paths.add(fullPath);
-
-					Entity group = new Group(ssServer);
-					group.setFavorite(true); //default is a favorite
-					group.setName(MonitorHelper.getMonitorNameFromFullPath(fullPath));
-					group.setFullPath(fullPath);
-					group.setType(RestCalls.GROUP_ENITYTYPE);
-					group.setEntityType(group.getType());
-
-					//Set default status
-					group.setStatus(MonitorHelper.STATUS_ERROR);
-
-					//even though there's an status_error, we still need to add the monitor to the list
-					//and display the status_error to the user
-					//				FavoritesList.getInstance().add(group);
-					if(!favoritesList.contains(group)) favoritesList.add(group);
-				}
-
-				favesCursor.moveToNext();
-			}
-		return FavoritesList.getInstance(context).size();
 	}
 
 }

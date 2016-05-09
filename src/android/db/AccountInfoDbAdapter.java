@@ -136,6 +136,4 @@ public interface AccountInfoDbAdapter {
 
     int getAccountsCount() throws Exception;
 
-    int populateFavoritesList();
-
 }
