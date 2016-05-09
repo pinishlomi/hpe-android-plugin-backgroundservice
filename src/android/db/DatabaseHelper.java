@@ -1,4 +1,4 @@
-package android.db;
+package com.hpe.android.plugin.backgroundservice.db;
 
 import android.database.sqlite.SQLiteDatabase;
 

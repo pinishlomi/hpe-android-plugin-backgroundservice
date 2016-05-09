@@ -1,9 +1,9 @@
-package android.rest;
+package com.hpe.android.plugin.backgroundservice.rest;
+
+import com.hpe.android.plugin.backgroundservice.data.SiteScopeServer;
 
 import java.util.Hashtable;
 import java.util.Vector;
-
-import android.data.SiteScopeServer;
 
 import org.json.JSONObject;
 

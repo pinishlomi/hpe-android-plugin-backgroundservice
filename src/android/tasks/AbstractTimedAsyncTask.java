@@ -1,4 +1,4 @@
-package android.tasks;
+package com.hpe.android.plugin.backgroundservice.tasks;
 
 import android.os.AsyncTask;
 import android.util.Log;

@@ -30,9 +30,11 @@
 
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
   
-            <service android:name="android.MyService" />
-              
-              
+            <service android:name="com.hpe.android.plugin.backgroundservice.MyService">
+                <intent-filter>         
+                    <action android:name="com.hpe.android.plugin.backgroundservice.MyService"/> 
+                </intent-filter>     
+            </service>
             
         </config-file>
         <!-- MyService -->

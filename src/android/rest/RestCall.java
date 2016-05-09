@@ -1,9 +1,10 @@
-package android.rest;
+package com.hpe.android.plugin.backgroundservice.rest;
 
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
-import android.data.SiteScopeServer;
+
+import com.hpe.android.plugin.backgroundservice.data.SiteScopeServer;
 
 import org.json.JSONObject;
 

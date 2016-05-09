@@ -1,4 +1,4 @@
-package android.rest.response;
+package com.hpe.android.plugin.backgroundservice.rest.response;
 
 
 import android.util.Log;

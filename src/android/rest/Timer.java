@@ -1,4 +1,4 @@
-package android.rest;
+package com.hpe.android.plugin.backgroundservice.rest;
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;

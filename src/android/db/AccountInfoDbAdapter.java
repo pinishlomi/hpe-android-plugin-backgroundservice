@@ -1,10 +1,10 @@
-package android.db;
+package com.hpe.android.plugin.backgroundservice.db;
 
 import android.database.Cursor;
 import android.database.SQLException;
 
-import android.data.Entity;
-import android.data.SiteScopeServer;
+import com.hpe.android.plugin.backgroundservice.data.Entity;
+import com.hpe.android.plugin.backgroundservice.data.SiteScopeServer;
 
 /**
  * Created by IntelliJ IDEA.

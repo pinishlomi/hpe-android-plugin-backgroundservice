@@ -1,4 +1,4 @@
-package android.db;
+package com.hpe.android.plugin.backgroundservice.db;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,8 +7,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import android.data.Entity;
-import android.data.SiteScopeServer;
+import com.hpe.android.plugin.backgroundservice.data.Entity;
+import com.hpe.android.plugin.backgroundservice.data.SiteScopeServer;
+
 /**
  * Account info database access helper class. Defines the basic CRUD operations
  * and gives the ability to list all account info values as well as
@@ -228,14 +229,14 @@ public class AccountInfoDbAdapterImpl implements AccountInfoDbAdapter {
 		final Cursor accountInfoCursor = fetchAccountsList();
 		while(!accountInfoCursor.isAfterLast())
 		{     // The Cursor is now set to the right position
-			String ssAcctName = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_NAME));
+			String ssAcctName = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_NAME));
 			//String siteScopeHost = siteScopeHost;//getIntent().getStringExtra("siteScopeHost");
-			String host = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_HOST));
-			String port = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_PORT));
-			String protocol = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_PROTOCOL));
-			boolean allowUntrustedCerts = Boolean.valueOf(accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_ALLOW_UNTRUSTED_CERTS)));
-			String username = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_USERNAME));
-			String password = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(android.db.AccountInfoDbAdapter.KEY_PASSWORD));
+			String host = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_HOST));
+			String port = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_PORT));
+			String protocol = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_PROTOCOL));
+			boolean allowUntrustedCerts = Boolean.valueOf(accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_ALLOW_UNTRUSTED_CERTS)));
+			String username = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_USERNAME));
+			String password = accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_PASSWORD));
 
 			final SiteScopeServer ssServer = new SiteScopeServer(protocol, host, port, username, password, ssAcctName, allowUntrustedCerts);
 

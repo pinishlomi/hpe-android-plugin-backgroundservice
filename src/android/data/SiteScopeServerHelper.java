@@ -1,4 +1,4 @@
-package android.data;
+package com.hpe.android.plugin.backgroundservice.data;
 
 public class SiteScopeServerHelper {
 

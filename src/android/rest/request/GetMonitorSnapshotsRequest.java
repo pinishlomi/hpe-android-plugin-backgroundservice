@@ -1,10 +1,9 @@
-package android.rest.request;
+package com.hpe.android.plugin.backgroundservice.rest.request;
 
 
-import android.data.Monitor;
-import android.data.SiteScopeServer;
-
-import android.rest.response.AbstractRestResponse;
+import com.hpe.android.plugin.backgroundservice.data.Monitor;
+import com.hpe.android.plugin.backgroundservice.data.SiteScopeServer;
+import com.hpe.android.plugin.backgroundservice.rest.response.AbstractRestResponse;
 
 import java.util.List;
 

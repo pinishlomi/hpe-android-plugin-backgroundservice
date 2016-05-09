@@ -1,11 +1,12 @@
-package android.data;
+package com.hpe.android.plugin.backgroundservice.data;
 
-import android.rest.RestCalls;
+
+import com.hpe.android.plugin.backgroundservice.rest.RestCalls;
 
 @SuppressWarnings("serial")
 public class Group extends Entity {
 
-	public Group(android.data.SiteScopeServer siteScopeServer) {
+	public Group(SiteScopeServer siteScopeServer) {
 		super(siteScopeServer);
         setEntityType(RestCalls.GROUP_ENITYTYPE);
 	}

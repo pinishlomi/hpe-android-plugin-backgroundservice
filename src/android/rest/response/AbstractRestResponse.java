@@ -1,10 +1,10 @@
-package android.rest.response;
+package com.hpe.android.plugin.backgroundservice.rest.response;
 
 
 import android.util.Log;
 
-import android.data.SiteScopeServer;
-import android.utils.SiteScopeError;
+import com.hpe.android.plugin.backgroundservice.data.SiteScopeServer;
+import com.hpe.android.plugin.backgroundservice.utils.SiteScopeError;
 
 /**
  * Created by IntelliJ IDEA.

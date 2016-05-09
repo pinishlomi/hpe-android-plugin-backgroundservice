@@ -1,15 +1,14 @@
-package android.rest;
+package com.hpe.android.plugin.backgroundservice.rest;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import android.data.Entity;
-import android.data.Monitor;
-import android.data.SiteScopeServer;
+import com.hpe.android.plugin.backgroundservice.data.Entity;
+import com.hpe.android.plugin.backgroundservice.data.Monitor;
+import com.hpe.android.plugin.backgroundservice.data.SiteScopeServer;
 
 import org.json.JSONObject;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Vector;

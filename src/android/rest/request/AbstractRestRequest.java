@@ -1,9 +1,10 @@
-package android.rest.request;
+package com.hpe.android.plugin.backgroundservice.rest.request;
 
-import android.data.SiteScopeServer;
-import android.rest.response.AbstractRestResponse;
-import android.tasks.AbstractTimedAsyncTask;
 import android.util.Log;
+
+import com.hpe.android.plugin.backgroundservice.data.SiteScopeServer;
+import com.hpe.android.plugin.backgroundservice.rest.response.AbstractRestResponse;
+import com.hpe.android.plugin.backgroundservice.tasks.AbstractTimedAsyncTask;
 
 /**
  * Created by IntelliJ IDEA.

@@ -1,4 +1,4 @@
-package android.utils;
+package com.hpe.android.plugin.backgroundservice.utils;
 
 public class SiteScopeError {
 

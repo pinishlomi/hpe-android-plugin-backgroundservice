@@ -1,6 +1,7 @@
-package android.data;
+package com.hpe.android.plugin.backgroundservice.data;
 
-import android.rest.RestCalls;
+
+import com.hpe.android.plugin.backgroundservice.rest.RestCalls;
 
 @SuppressWarnings("serial")
 public class Monitor extends Entity {
@@ -11,7 +12,7 @@ public class Monitor extends Entity {
 	private String targetDisplayName;
 	private boolean availability;
 	
-	public Monitor(android.data.SiteScopeServer siteScopeServer) {
+	public Monitor(SiteScopeServer siteScopeServer) {
 		super(siteScopeServer);
         setEntityType(RestCalls.MONITOR_ENITYTYPE);
 	}

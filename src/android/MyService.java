@@ -1,4 +1,4 @@
-package android;
+package com.hpe.android.plugin.backgroundservice;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
