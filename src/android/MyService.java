@@ -8,10 +8,15 @@ import org.json.JSONObject;
 
 import android.database.Cursor;
 import android.util.Log;
-
+import android.content.Intent;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import com.hpe.android.plugin.backgroundservice.db.AccountInfoDbAdapterImpl;
 import com.hpe.android.plugin.backgroundservice.db.AccountInfoDbAdapter;
 import com.red_folder.phonegap.plugin.backgroundservice.BackgroundService;
+import com.ionicframework.sismobile287465.MainActivity;
+import android.support.v4.app.NotificationCompat;
 
 public class MyService extends BackgroundService {
 
@@ -39,15 +44,26 @@ public class MyService extends BackgroundService {
 
       itemInfoCursor = mDbHelper.fetchFavoritesList();
       int itemsNum = itemInfoCursor.getCount();
-      msg += "  itemsNum : " + itemsNum;
-      if (itemsNum > 0) {
-        while (!itemInfoCursor.isAfterLast()) {
-          String entityType = itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.TYPE));
-          String full_path = itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.FULL_PATH));
-          msg += " item    type: " + entityType + "  full_path: " + full_path;
+
+      if(accountsNum > 0 && itemsNum > 0) {
+        while (!accountInfoCursor.isAfterLast()) {
+          int instanceId = accountInfoCursor.getInt(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_ROWID));
+          msg += "  itemsNum : " + itemsNum;
+          while (!itemInfoCursor.isAfterLast()) {
+            String parentId = itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.PARENT_ID));
+            msg += "  parentId : " + parentId + "  instanceId : "+ instanceId;
+            if (Integer.parseInt(parentId) == instanceId){
+                String entityType = itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.TYPE));
+                String full_path = itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.FULL_PATH));
+                msg += " item    type: " + entityType + "  full_path: " + full_path ;
+            }
+            itemInfoCursor.moveToNext();
+          }
+          itemInfoCursor.moveToFirst();
+        accountInfoCursor.moveToNext();
         }
       }
-
+      msg+= addNotification("SiteScope Alert", msg);
       Log.d(TAG, msg );
     } catch (Exception e) {
       Log.e(TAG, "Error retrieving accounts - " + e.getMessage());
@@ -59,6 +75,19 @@ public class MyService extends BackgroundService {
     } catch (Exception e) {
     }
     return result;
+  }
+
+  public String addNotification(String title, String msg)
+  {
+    Notification noti = new Notification.Builder(this)
+            .setContentTitle(title)
+            .setContentText(msg)
+            //.setSmallIcon("resources/android/icon/drawable-hdpi-icon.png")
+            .setAutoCancel(true).build();
+    noti.flags |= Notification.FLAG_AUTO_CANCEL;
+    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    notificationManager.notify(12345, noti);
+    return " in addNotification .... ";
   }
 
   @Override
