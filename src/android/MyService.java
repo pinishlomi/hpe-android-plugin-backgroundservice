@@ -16,7 +16,7 @@ import com.hpe.android.plugin.backgroundservice.db.AccountInfoDbAdapterImpl;
 import com.hpe.android.plugin.backgroundservice.db.AccountInfoDbAdapter;
 import com.red_folder.phonegap.plugin.backgroundservice.BackgroundService;
 import com.ionicframework.sismobile287465.MainActivity;
-import android.support.v4.app.NotificationCompat;
+
 
 public class MyService extends BackgroundService {
 
