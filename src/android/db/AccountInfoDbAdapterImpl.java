@@ -8,8 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.hpe.android.plugin.backgroundservice.data.Entity;
+import com.hpe.android.plugin.backgroundservice.data.Monitor;
 import com.hpe.android.plugin.backgroundservice.data.SiteScopeServer;
-
+import com.hpe.android.plugin.backgroundservice.utils.Util;
 /**
  * Account info database access helper class. Defines the basic CRUD operations
  * and gives the ability to list all account info values as well as
@@ -131,6 +132,7 @@ public class AccountInfoDbAdapterImpl implements AccountInfoDbAdapter {
 		open();
 		Cursor mCursor = mDb.query(FAVES_DATABASE_TABLE,
 				new String[] {
+						KEY_ROWID,
 						PARENT_ID,
 						NAME,
 						UPDATE_DATE,
@@ -202,6 +204,37 @@ public class AccountInfoDbAdapterImpl implements AccountInfoDbAdapter {
 		long result = mDb.insert(FAVES_DATABASE_TABLE, null, initialValues);
 		close();
 		return result;
+	}
+
+	public long updateFavorite(	Entity entity, String status) {
+		open();
+		ContentValues initialValues = new ContentValues();
+		String entityType = entity.getEntityType();
+		//initialValues.put(KEY_ROWID, entity.getId());
+		initialValues.put(PARENT_ID, entity.getParent_id());
+		initialValues.put(NAME, entity.getName());
+		initialValues.put(UPDATE_DATE, entity.getUpdatedDate());
+		initialValues.put(TYPE, entityType);
+		initialValues.put(STATUS, status);
+		initialValues.put(SUMMARY, entity.getSummary());
+		initialValues.put(FULL_PATH, entity.getFullPath());
+		initialValues.put(DESCREPTION, entity.getDescription());
+		initialValues.put(ROW_DATA, entity.getRow_data());
+		if (entityType.equals("Group")) {
+			initialValues.put(TARGET_DISPLAY_NAME, "");
+			initialValues.put(AVAILABILITY, "");
+		}else{
+			initialValues.put(TARGET_DISPLAY_NAME, ((Monitor) entity).getTargetDisplayName());
+			initialValues.put(AVAILABILITY, ((Monitor) entity).getAvailabilityDescription());
+		}
+		String whereClause = KEY_ROWID + "=" + entity.getId();
+		//PARENT_ID + "=\"" + entity.getParent_id()
+		//		+ "\" and " + FULL_PATH + "=\"" + entity.getFullPath() + "\"";
+		//String[] args = new String[]{"user1", "user2"};
+		Util.appendLog("updateFavorite : whereClause = " +whereClause + " entityType: " + entityType + "   itemId =" + entity.getId());
+		long result = mDb.update(FAVES_DATABASE_TABLE, initialValues, whereClause , null);
+		close();
+		return  result;
 	}
 
 	public boolean deleteFavorite(long rowId)

@@ -7,6 +7,7 @@ import java.util.Date;
 @SuppressWarnings("serial")
 public class Entity implements Serializable{
 
+	private String id;
 	private long disableEndTime;
 	private boolean isAssociatedAlertsDisabled;
 	private long associatedAlertsDisableStartTime;
@@ -22,21 +23,21 @@ public class Entity implements Serializable{
 	private String name;
 	private String description;
 	private String type;
-	private String status; 
+	private String status;
 	private String summary;
 	private String row_data;
-	private Date updatedDate;	
+	private String updatedDate;
 	private boolean isFavorite;
 
     private String entityType; //SoapCalls.MONITOR_ENITYTYPE OR SoapCalls.GROUP_ENITYTYPE;
-	
+
 	private String errorMsg;
 
 	private SiteScopeServer siteScopeServer;
 
 	public Entity(SiteScopeServer siteScopeServer) {
 		super();
-		this.siteScopeServer = siteScopeServer;		
+		this.siteScopeServer = siteScopeServer;
 		this.associatedAlertsDisableStartTime = 0;
 		this.disableStartTime = 0;
 		this.setFavorite(false);
@@ -46,6 +47,12 @@ public class Entity implements Serializable{
 
     }
 
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
     public String getEntityType() {
         return entityType;
     }
@@ -59,7 +66,7 @@ public class Entity implements Serializable{
 	}
 	public void setName(String name) {
 		this.name = name;
-	}	
+	}
 	public String getDescription() {
 		return description;
 	}
@@ -102,10 +109,10 @@ public class Entity implements Serializable{
 	public void setParent_id(String parent_id) {
 		this.parent_id = parent_id;
 	}
-	public Date getUpdatedDate() {
+	public String getUpdatedDate() {
 		return updatedDate;
 	}
-	public void setUpdatedDate(Date updatedDate) {
+	public void setUpdatedDate(String updatedDate) {
 		this.updatedDate = updatedDate;
 	}
 	public SiteScopeServer getSiteScopeServer() {

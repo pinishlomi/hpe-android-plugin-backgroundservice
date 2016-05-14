@@ -1,22 +1,38 @@
 package com.hpe.android.plugin.backgroundservice;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.database.Cursor;
-import android.util.Log;
-import android.content.Intent;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import com.hpe.android.plugin.backgroundservice.db.AccountInfoDbAdapterImpl;
-import com.hpe.android.plugin.backgroundservice.db.AccountInfoDbAdapter;
 import com.red_folder.phonegap.plugin.backgroundservice.BackgroundService;
 import com.ionicframework.sismobile287465.MainActivity;
+import de.appplant.cordova.plugin.notification.*;
+import de.appplant.cordova.plugin.localnotification.*;
+import com.ionicframework.sismobile287465.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import android.os.Environment;
+import android.database.Cursor;
+import android.app.Notification;
+import android.app.NotificationManager;
+import com.hpe.android.plugin.backgroundservice.db.AccountInfoDbAdapterImpl;
+import com.hpe.android.plugin.backgroundservice.db.AccountInfoDbAdapter;
+import com.hpe.android.plugin.backgroundservice.data.Entity;
+import com.hpe.android.plugin.backgroundservice.data.Group;
+import com.hpe.android.plugin.backgroundservice.data.Monitor;
+import android.os.AsyncTask;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.List;
+import com.hpe.android.plugin.backgroundservice.utils.Util;
+import com.hpe.android.plugin.backgroundservice.rest.GetEntitySnapshots;
 
 public class MyService extends BackgroundService {
 
@@ -26,69 +42,111 @@ public class MyService extends BackgroundService {
   private AccountInfoDbAdapterImpl mDbHelper;
   private Cursor accountInfoCursor;
   private Cursor itemInfoCursor;
+  private String msg = "";
   @Override
   protected JSONObject doWork() {
     JSONObject result = new JSONObject();
-    String msg = "";
     try {
-      SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-      String now = df.format(new Date(System.currentTimeMillis()));
-
-      msg = "Hello " + this.mHelloTo + " - its currently " + now;
       mDbHelper = new AccountInfoDbAdapterImpl(this.getApplicationContext());
       mDbHelper.open();
       accountInfoCursor = mDbHelper.fetchAccountsList();
-       //If there is at least one account then whether retrieve monitor from alert or go to Home screen
       int accountsNum = accountInfoCursor.getCount();
-      msg += " accountsNum : " + accountsNum;
-
       itemInfoCursor = mDbHelper.fetchFavoritesList();
       int itemsNum = itemInfoCursor.getCount();
-
+      Util.createLogFile();
       if(accountsNum > 0 && itemsNum > 0) {
+        List<Entity> groups = null;
+        String groupPaths=null;
+        List<Entity> monitors = null;
+        String monitorPaths=null;
         while (!accountInfoCursor.isAfterLast()) {
+          // start instance
+          groups = new ArrayList<Entity>();
+          groupPaths="";
+          monitors = new ArrayList<Entity>();
+          monitorPaths="";
           int instanceId = accountInfoCursor.getInt(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_ROWID));
-          msg += "  itemsNum : " + itemsNum;
+          //msg += "  itemsNum : " + itemsNum;
           while (!itemInfoCursor.isAfterLast()) {
             String parentId = itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.PARENT_ID));
-            msg += "  parentId : " + parentId + "  instanceId : "+ instanceId;
+            //msg += "  parentId : " + parentId + "  instanceId : "+ instanceId;
             if (Integer.parseInt(parentId) == instanceId){
-                String entityType = itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.TYPE));
-                String full_path = itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.FULL_PATH));
-                msg += " item    type: " + entityType + "  full_path: " + full_path ;
+              int itemId = itemInfoCursor.getInt(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_ROWID));
+              String entityType = itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.TYPE));
+              String full_path  = itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.FULL_PATH));
+              msg = "itemId: " + itemId +" type: " + entityType + "  full_path: " + full_path + "\n" ;
+              //Util.appendLog("add \n" + msg);
+              if(entityType.equals("Group")){
+                //Util.appendLog("add to groups \n" +msg);
+                groups.add(createEntity(itemInfoCursor));
+                groupPaths+=full_path+";";
+              }else{// monitor
+                //Util.appendLog("add to monitors \n" + msg);
+                monitors.add(createEntity(itemInfoCursor));
+                monitorPaths+=full_path+";";
+              }
             }
             itemInfoCursor.moveToNext();
           }
           itemInfoCursor.moveToFirst();
-        accountInfoCursor.moveToNext();
+          accountInfoCursor.moveToNext();
         }
+        if(groups.size()>0)
+          getEntitiesStatuses("http://52.201.214.26:8080/SiteScope/api/monitors/groups/snapshots?fullPathsToGroups="+groupPaths, groups) ;
+        if(monitors.size()>0)
+          getEntitiesStatuses("http://52.201.214.26:8080/SiteScope/api/monitors/snapshots?fullPathsToMonitors="+monitorPaths, monitors) ;
+
       }
-      msg+= addNotification("SiteScope Alert", msg);
-      Log.d(TAG, msg );
     } catch (Exception e) {
-      Log.e(TAG, "Error retrieving accounts - " + e.getMessage());
-      msg += "  Error: " + e.getMessage();
+      Util.appendLog("Error in doWork: " + e.getMessage());
     }
 
     try {
       result.put("Message",msg);
     } catch (Exception e) {
+      Util.appendLog("Error in doWork in result: " + e.getMessage());
     }
+    String title = " Sitescope Alert";
+    String msg = "Status changes";
+    Util.addNotification(this, title,  msg);
+
     return result;
   }
 
-  public String addNotification(String title, String msg)
-  {
-    Notification noti = new Notification.Builder(this)
-            .setContentTitle(title)
-            .setContentText(msg)
-            //.setSmallIcon("resources/android/icon/drawable-hdpi-icon.png")
-            .setAutoCancel(true).build();
-    noti.flags |= Notification.FLAG_AUTO_CANCEL;
-    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-    notificationManager.notify(12345, noti);
-    return " in addNotification .... ";
+  private Entity createEntity(Cursor itemInfoCursor) {
+    String entityType = itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.TYPE));
+    Entity entity =  null;
+    if(entityType.equals("Group"))
+      entity = new Group(entityType);
+    else
+      entity = new Monitor(entityType);
+
+    entity.setId(itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_ROWID))+"");
+    entity.setFullPath(itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.FULL_PATH)));
+    entity.setParent_id(itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.PARENT_ID)));
+    entity.setStatus(itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.STATUS)));
+    entity.setName(itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.NAME)));
+    entity.setUpdatedDate(itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.UPDATE_DATE)));
+    entity.setSummary(itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.SUMMARY)));
+    entity.setDescription(itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.DESCREPTION)));
+    entity.setRow_data(itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.ROW_DATA)));
+    if (!entityType.equals("Group")) {
+      ((Monitor) entity).setTargetName(itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.TARGET_DISPLAY_NAME)));
+      ((Monitor) entity).setAvailabilityDescription(itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.AVAILABILITY)));
+    }
+
+    return entity;
   }
+  //================================================================================================================
+
+  public void getEntitiesStatuses(String url, List<Entity> entities ){
+
+    GetEntitySnapshots getEntitySnapshots = new GetEntitySnapshots(url,entities,this);
+    getEntitySnapshots.execute();
+  }
+
+
+//=====================================================================================================================
 
   @Override
   protected JSONObject getConfig() {
@@ -98,7 +156,6 @@ public class MyService extends BackgroundService {
       result.put("HelloTo", this.mHelloTo);
     } catch (JSONException e) {
     }
-
     return result;
   }
 
@@ -114,21 +171,26 @@ public class MyService extends BackgroundService {
 
   @Override
   protected JSONObject initialiseLatestResult() {
-    // TODO Auto-generated method stub
+    Util.appendLog( "initialiseLatestResult : " +msg);
     return null;
   }
 
   @Override
   protected void onTimerEnabled() {
-    // TODO Auto-generated method stub
+    Util.appendLog( "onTimerEnabled : " +msg);
 
   }
 
   @Override
   protected void onTimerDisabled() {
-    // TODO Auto-generated method stub
+    Util.appendLog( "onTimerDisabled : " +msg);
 
   }
+  @Override
+  protected void onPause() {
+    Util.appendLog( "In onPause : " +msg);
+  }
+
 
 
 }
