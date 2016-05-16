@@ -55,29 +55,13 @@ public class Util {
 		}
 	}
 
-	//  public void notifyUser(){
-//    final NotificationManager mgr=(NotificationManager)this.getSystemService(NOTIFICATION_SERVICE);
-//    Notification note=new Notification(1,"Android Example Status message!",System.currentTimeMillis());//R.drawable.aler_icon
-//
-//    // This pending intent will open after notification click
-//    //PendingIntent i=PendingIntent.getActivity(this, 0,new Intent(this, NotifyMessage.class),0);
-//
-//    note.setLatestEventInfo(this, "Android Example Notification Title",	"This is the android example notification message", null);
-//    //note.flags = Notification.FLAG_AUTO_CANCEL | Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND;
-//    //After uncomment this line you will see number of notification arrived
-//    //note.number=2;
-//    mgr.notify(1234, note);
-//    msg = " in addNotification .... ";
-//
-// =========================================================================================================
-
-
 	public static void addNotification(Context context, String title, String msg)
 	{
 		// prepare intent which is triggered if the
 		// notification is selected
 
 		Intent intent = new Intent(context, MainActivity.class);
+		intent.putExtra("MSG", msg );
 		// use System.currentTimeMillis() to have a unique ID for the pending intent
 		PendingIntent pIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), intent, 0);
 

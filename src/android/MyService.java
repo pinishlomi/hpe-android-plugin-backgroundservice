@@ -73,9 +73,11 @@ public class MyService extends BackgroundService {
             if (Integer.parseInt(parentId) == instanceId){
               int itemId = itemInfoCursor.getInt(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_ROWID));
               String entityType = itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.TYPE));
+              String name = itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.TYPE));
               String full_path  = itemInfoCursor.getString(itemInfoCursor.getColumnIndex(AccountInfoDbAdapter.FULL_PATH));
+              full_path = full_path.replace(" ", "%20");
               msg = "itemId: " + itemId +" type: " + entityType + "  full_path: " + full_path + "\n" ;
-              //Util.appendLog("add \n" + msg);
+              Util.appendLog("add \n" + msg);
               if(entityType.equals("Group")){
                 //Util.appendLog("add to groups \n" +msg);
                 groups.add(createEntity(itemInfoCursor));
@@ -89,12 +91,19 @@ public class MyService extends BackgroundService {
             itemInfoCursor.moveToNext();
           }
           itemInfoCursor.moveToFirst();
+          if((groups.size()>0)|(monitors.size()>0)){
+            // get instace data
+            String protocol =  accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_PROTOCOL));
+            String host =  accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_HOST));
+            String port =  accountInfoCursor.getString(accountInfoCursor.getColumnIndex(AccountInfoDbAdapter.KEY_PORT));
+            String prefixUrl = protocol + "://" + host + ":" + port ;
+            if(groups.size()>0)
+              getEntitiesStatuses(prefixUrl + "/SiteScope/api/monitors/groups/snapshots?fullPathsToGroups="+groupPaths, groups) ;
+            if(monitors.size()>0)
+              getEntitiesStatuses(prefixUrl + "/SiteScope/api/monitors/snapshots?fullPathsToMonitors="+monitorPaths, monitors) ;
+          }
           accountInfoCursor.moveToNext();
         }
-        if(groups.size()>0)
-          getEntitiesStatuses("http://52.201.214.26:8080/SiteScope/api/monitors/groups/snapshots?fullPathsToGroups="+groupPaths, groups) ;
-        if(monitors.size()>0)
-          getEntitiesStatuses("http://52.201.214.26:8080/SiteScope/api/monitors/snapshots?fullPathsToMonitors="+monitorPaths, monitors) ;
 
       }
     } catch (Exception e) {
@@ -106,9 +115,9 @@ public class MyService extends BackgroundService {
     } catch (Exception e) {
       Util.appendLog("Error in doWork in result: " + e.getMessage());
     }
-    String title = " Sitescope Alert";
-    String msg = "Status changes";
-    Util.addNotification(this, title,  msg);
+//    String title = " Sitescope Alert";
+//    String msg = "Status changes";
+//    Util.addNotification(this, title,  msg);
 
     return result;
   }
@@ -141,6 +150,7 @@ public class MyService extends BackgroundService {
 
   public void getEntitiesStatuses(String url, List<Entity> entities ){
 
+    //Util.appendLog("getEntitiesStatuses => url : " +url + "entities size :" + entities.size());
     GetEntitySnapshots getEntitySnapshots = new GetEntitySnapshots(url,entities,this);
     getEntitySnapshots.execute();
   }

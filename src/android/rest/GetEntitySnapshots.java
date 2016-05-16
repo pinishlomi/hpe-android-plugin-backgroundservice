@@ -6,7 +6,7 @@ import com.hpe.android.plugin.backgroundservice.utils.Util;
 import com.hpe.android.plugin.backgroundservice.db.AccountInfoDbAdapterImpl;
 import com.hpe.android.plugin.backgroundservice.data.Entity;
 import com.hpe.android.plugin.backgroundservice.rest.RestCall;
-
+import com.hpe.android.plugin.backgroundservice.data.Monitor;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -36,6 +36,7 @@ public class GetEntitySnapshots extends AsyncTask<Void, Void, Void> {
             //Util.appendLog(url);
             JSONObject json = RestCall.getJSONFromUrl(url);
             //Util.appendLog(json.toString());
+            boolean statusChange = false;
             for(Entity entity : entities){
                 //Util.appendLog("i = "+i+" paths.length: " + paths.length + " paths[i]: "+ paths[i]);
                 JSONObject entityData  = (JSONObject) json.get(entity.getFullPath());
@@ -45,9 +46,12 @@ public class GetEntitySnapshots extends AsyncTask<Void, Void, Void> {
                 //Util.appendLog( entity.getParent_id() + " last status: " + entity.getStatus()+ "  new status: " + status);
                 if(!status.equals(entity.getStatus())){
                     // status change
-                    handleStatusChange(context,entity,status);
+                    statusChange = true;
+                    handleStatusChange(context,entity,entityData);
                 }
             }
+            if(!statusChange)
+                Util.appendLog("Status not change , checked  " + entities.size());
         } catch (JSONException e) {
             Util.appendLog("Error in doInBackground : " + e.getMessage());
         }
@@ -55,12 +59,31 @@ public class GetEntitySnapshots extends AsyncTask<Void, Void, Void> {
     }
 
 
-    private void handleStatusChange(Context context, Entity entity, String status) {
-        Util.appendLog("handleStatusChange  parentId: " + entity.getParent_id() + " new status: " + status);
-        long res = mDbHelper.updateFavorite(entity, status);
-        Util.appendLog("handleStatusChange  parentId: " + entity.getParent_id() + " new status: " + status +" res: " + res);
+    private void handleStatusChange(Context context, Entity entity, JSONObject entityData) throws JSONException{
+        String oldStatus = entity.getStatus();
+        updateEntity(entity, entityData);
+        long res = mDbHelper.updateFavorite(entity);
+        Util.appendLog("handleStatusChange  parentId: " + entity.getParent_id() + " new status: " + entity.getStatus() +" res: " + res);
         String title = " Sitescope Alert";
-        String msg = "Status changes from " + entity.getStatus() + " new status: " + status + " for entity in  : " + entity.getFullPath() ;
+        String msg = "Status changes from " + oldStatus + " to: " + entity.getStatus() + " for entity   : " + entity.getFullPath().replace("_sis_path_delimiter_", "\\/") ;
         Util.addNotification(context, title,  msg);
     }
+
+    private void updateEntity(Entity entity, JSONObject entityData) throws JSONException {
+        JSONObject runtime_snapshot  = (JSONObject) entityData.get("runtime_snapshot");
+        JSONObject configuration_snapshot  = (JSONObject) entityData.get("configuration_snapshot");
+
+        entity.setFullPath((String) configuration_snapshot.get("full_path"));
+        entity.setStatus((String)runtime_snapshot.get("status"));
+        entity.setName((String)configuration_snapshot.get("name"));
+        entity.setUpdatedDate((String)configuration_snapshot.get("updated_date"));
+        entity.setSummary((String)runtime_snapshot.get("summary"));
+        entity.setDescription((String)configuration_snapshot.get("description"));
+        entity.setRow_data(entityData.toString());
+        if (!(entity.getEntityType()).equals("Group")) {
+            ((Monitor) entity).setTargetName((String)configuration_snapshot.get("target_name"));
+            ((Monitor) entity).setAvailabilityDescription((String)runtime_snapshot.get("availability_description"));
+        }
+    }
+
 }

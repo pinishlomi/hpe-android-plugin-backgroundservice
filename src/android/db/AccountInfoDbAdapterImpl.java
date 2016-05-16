@@ -206,16 +206,16 @@ public class AccountInfoDbAdapterImpl implements AccountInfoDbAdapter {
 		return result;
 	}
 
-	public long updateFavorite(	Entity entity, String status) {
+	public long updateFavorite(	Entity entity) {
 		open();
 		ContentValues initialValues = new ContentValues();
 		String entityType = entity.getEntityType();
 		//initialValues.put(KEY_ROWID, entity.getId());
-		initialValues.put(PARENT_ID, entity.getParent_id());
+		//initialValues.put(PARENT_ID, entity.getParent_id());
 		initialValues.put(NAME, entity.getName());
 		initialValues.put(UPDATE_DATE, entity.getUpdatedDate());
 		initialValues.put(TYPE, entityType);
-		initialValues.put(STATUS, status);
+		initialValues.put(STATUS, entity.getStatus());
 		initialValues.put(SUMMARY, entity.getSummary());
 		initialValues.put(FULL_PATH, entity.getFullPath());
 		initialValues.put(DESCREPTION, entity.getDescription());
