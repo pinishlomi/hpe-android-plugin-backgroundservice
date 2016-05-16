@@ -210,8 +210,6 @@ public class AccountInfoDbAdapterImpl implements AccountInfoDbAdapter {
 		open();
 		ContentValues initialValues = new ContentValues();
 		String entityType = entity.getEntityType();
-		//initialValues.put(KEY_ROWID, entity.getId());
-		//initialValues.put(PARENT_ID, entity.getParent_id());
 		initialValues.put(NAME, entity.getName());
 		initialValues.put(UPDATE_DATE, entity.getUpdatedDate());
 		initialValues.put(TYPE, entityType);

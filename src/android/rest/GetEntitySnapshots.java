@@ -7,11 +7,14 @@ import com.hpe.android.plugin.backgroundservice.db.AccountInfoDbAdapterImpl;
 import com.hpe.android.plugin.backgroundservice.data.Entity;
 import com.hpe.android.plugin.backgroundservice.rest.RestCall;
 import com.hpe.android.plugin.backgroundservice.data.Monitor;
+import com.hpe.android.plugin.backgroundservice.db.AccountInfoDbAdapter;
+
 import android.content.Context;
 import android.os.AsyncTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 /*
    * Async Task to make http call
@@ -66,7 +69,11 @@ public class GetEntitySnapshots extends AsyncTask<Void, Void, Void> {
         Util.appendLog("handleStatusChange  parentId: " + entity.getParent_id() + " new status: " + entity.getStatus() +" res: " + res);
         String title = " Sitescope Alert";
         String msg = "Status changes from " + oldStatus + " to: " + entity.getStatus() + " for entity   : " + entity.getFullPath().replace("_sis_path_delimiter_", "\\/") ;
-        Util.addNotification(context, title,  msg);
+        JSONObject values = new JSONObject();
+        values.put(AccountInfoDbAdapter.KEY_ROWID,entity.getId());
+        values.put(AccountInfoDbAdapter.PARENT_ID,entity.getParent_id());
+        values.put(AccountInfoDbAdapter.FULL_PATH,entity.getFullPath());
+        Util.addNotification(context, title,  msg ,values);
     }
 
     private void updateEntity(Entity entity, JSONObject entityData) throws JSONException {

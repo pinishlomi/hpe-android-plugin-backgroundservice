@@ -2,10 +2,7 @@ package com.hpe.android.plugin.backgroundservice;
 
 import com.red_folder.phonegap.plugin.backgroundservice.BackgroundService;
 import com.ionicframework.sismobile287465.MainActivity;
-import de.appplant.cordova.plugin.notification.*;
-import de.appplant.cordova.plugin.localnotification.*;
 import com.ionicframework.sismobile287465.R;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.json.JSONException;

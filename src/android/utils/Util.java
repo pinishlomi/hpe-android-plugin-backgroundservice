@@ -14,6 +14,9 @@ import com.ionicframework.sismobile287465.R;
 import com.ionicframework.sismobile287465.MainActivity;
 import android.content.Intent;
 import android.app.PendingIntent;
+import org.json.JSONObject;
+
+
 
 public class Util {
 
@@ -55,13 +58,14 @@ public class Util {
 		}
 	}
 
-	public static void addNotification(Context context, String title, String msg)
+	public static void addNotification(Context context, String title, String msg, JSONObject values)
 	{
 		// prepare intent which is triggered if the
 		// notification is selected
 
 		Intent intent = new Intent(context, MainActivity.class);
-		intent.putExtra("MSG", msg );
+		intent.putExtra("extrasData",	values.toString());
+
 		// use System.currentTimeMillis() to have a unique ID for the pending intent
 		PendingIntent pIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), intent, 0);
 
