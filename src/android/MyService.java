@@ -1,8 +1,8 @@
 package com.hpe.android.plugin.backgroundservice;
 
 import com.red_folder.phonegap.plugin.backgroundservice.BackgroundService;
-import com.ionicframework.sismobile287465.MainActivity;
-import com.ionicframework.sismobile287465.R;
+import hpe.com.sitescope.MainActivity;
+import hpe.com.sitescope.R;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.json.JSONException;
