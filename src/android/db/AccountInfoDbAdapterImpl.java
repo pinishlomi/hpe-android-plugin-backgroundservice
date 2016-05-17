@@ -226,9 +226,6 @@ public class AccountInfoDbAdapterImpl implements AccountInfoDbAdapter {
 			initialValues.put(AVAILABILITY, ((Monitor) entity).getAvailabilityDescription());
 		}
 		String whereClause = KEY_ROWID + "=" + entity.getId();
-		//PARENT_ID + "=\"" + entity.getParent_id()
-		//		+ "\" and " + FULL_PATH + "=\"" + entity.getFullPath() + "\"";
-		//String[] args = new String[]{"user1", "user2"};
 		Util.appendLog("updateFavorite : whereClause = " +whereClause + " entityType: " + entityType + "   itemId =" + entity.getId());
 		long result = mDb.update(FAVES_DATABASE_TABLE, initialValues, whereClause , null);
 		close();

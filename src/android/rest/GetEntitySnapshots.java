@@ -36,17 +36,12 @@ public class GetEntitySnapshots extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... args) {
         try {
-            //Util.appendLog(url);
             JSONObject json = RestCall.getJSONFromUrl(url);
-            //Util.appendLog(json.toString());
             boolean statusChange = false;
             for(Entity entity : entities){
-                //Util.appendLog("i = "+i+" paths.length: " + paths.length + " paths[i]: "+ paths[i]);
-                JSONObject entityData  = (JSONObject) json.get(entity.getFullPath());
-                //Util.appendLog("i = "+i+" " + entityData.toString());
+                 JSONObject entityData  = (JSONObject) json.get(entity.getFullPath());
                 JSONObject runtime_snapshot  = (JSONObject) entityData.get("runtime_snapshot");
                 String status = (String) runtime_snapshot.get("status");
-                //Util.appendLog( entity.getParent_id() + " last status: " + entity.getStatus()+ "  new status: " + status);
                 if(!status.equals(entity.getStatus())){
                     // status change
                     statusChange = true;
@@ -73,7 +68,7 @@ public class GetEntitySnapshots extends AsyncTask<Void, Void, Void> {
         values.put(AccountInfoDbAdapter.KEY_ROWID,entity.getId());
         values.put(AccountInfoDbAdapter.PARENT_ID,entity.getParent_id());
         values.put(AccountInfoDbAdapter.FULL_PATH,entity.getFullPath());
-        Util.addNotification(context, title,  msg ,values);
+        Util.addNotification(context, entity.getId(), title,  msg ,values);
     }
 
     private void updateEntity(Entity entity, JSONObject entityData) throws JSONException {

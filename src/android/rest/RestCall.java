@@ -18,17 +18,11 @@ public class RestCall  {
 	public  static JSONObject getJSONFromUrl(String targetUrl) throws JSONException {
 		JSONObject jObj = new JSONObject();
 		try {
-			//tring webPage = "http://52.201.214.26:8080/SiteScope/api/monitors/snapshots?fullPathsToMonitors=memMonitors_sis_path_delimiter_mem";
-			//String webPage = "http://52.201.214.26:8080/SiteScope/api/monitors/snapshots?fullPathsToMonitors=CpuMonitors_sis_path_delimiter_gr1_sis_path_delimiter_Memory for same on SiteScope Server";
 			URL url = new URL(targetUrl);
-			//Util.appendLog("webPage:\n" + targetUrl);
 			URLConnection urlConnection = url.openConnection();
 			urlConnection.setRequestProperty("Authorization", "Basic YWRtaW46YWRtaW4=");
-			//Util.appendLog("Befoe urlConnection.getInputStream():\n");
 			InputStream is = urlConnection.getInputStream();
-			//Util.appendLog("Befoe InputStreamReader(is):\n");
 			InputStreamReader isr = new InputStreamReader(is);
-			//Util.appendLog("After InputStreamReader(is):\n");
 			int numCharsRead;
 			char[] charArray = new char[1024];
 			StringBuffer sb = new StringBuffer();
@@ -36,7 +30,6 @@ public class RestCall  {
 				sb.append(charArray, 0, numCharsRead);
 			}
 			String result = sb.toString();
-			//Util.appendLog("result:\n" + result);
 			jObj = new JSONObject(result);
 		} catch (MalformedURLException e) {
 			jObj.put("ErrorMsg from MalformedURLException : ", e.getMessage());

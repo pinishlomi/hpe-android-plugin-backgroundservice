@@ -58,7 +58,7 @@ public class Util {
 		}
 	}
 
-	public static void addNotification(Context context, String title, String msg, JSONObject values)
+	public static void addNotification(Context context, String itemId,String title, String msg, JSONObject values)
 	{
 		// prepare intent which is triggered if the
 		// notification is selected
@@ -70,7 +70,6 @@ public class Util {
 		PendingIntent pIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), intent, 0);
 
 		// build notification
-		// the addAction re-use the same intent to keep the example short
 		Notification noti = new Notification.Builder(context)
 				.setContentTitle(title)
 				//.setContentText(msg)
@@ -80,27 +79,8 @@ public class Util {
 				.setAutoCancel(true).build();
 
 		NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
-		notificationManager.notify(12345, noti);
-		appendLog(" in addNotification .... ");
-/*
-		Notification n  = new Notification.Builder(this)
-				.setContentTitle("New mail from " + "test@gmail.com")
-				.setContentText("Subject")
-				.setSmallIcon(R.drawable.icon)
-				.setContentIntent(pIntent)
-				.setAutoCancel(true)
-				.addAction(R.drawable.icon, "Call", pIntent)
-				.addAction(R.drawable.icon, "More", pIntent)
-				.addAction(R.drawable.icon, "And more", pIntent).build();
-
-
-		NotificationManager notificationManager =
-				(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-		notificationManager.notify(0, n);
-
-*/
-
+		notificationManager.notify(Integer.parseInt(itemId), noti);
+		appendLog(" add addNotification : itemId: " + itemId + " msg: " + msg );
 	}
 
 }
