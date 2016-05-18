@@ -24,6 +24,7 @@ public class Util {
 	public static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
 	public static final String LOG_DIR ="HybridSisMobile";
 	public static final String LOG_FILE ="Log.txt";
+	public static final long MAX_LOG_FILE_SIZE =20000;
 	private static File file = null;
 
 
@@ -35,7 +36,7 @@ public class Util {
 			folder.mkdirs();
 
 			//create file
-			if (file == null){
+			if (file == null || file.length() > MAX_LOG_FILE_SIZE){
 				file = new File(dir, LOG_FILE);
 			}
 		}

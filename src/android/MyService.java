@@ -35,7 +35,6 @@ public class MyService extends BackgroundService {
 
   private final static String TAG = MyService.class.getSimpleName();
 
-  private String mHelloTo = "Sitescope";
   private AccountInfoDbAdapterImpl mDbHelper;
   private Cursor accountInfoCursor;
   private Cursor itemInfoCursor;
@@ -149,43 +148,15 @@ public class MyService extends BackgroundService {
   @Override
   protected JSONObject getConfig() {
     JSONObject result = new JSONObject();
-
-    try {
-      result.put("HelloTo", this.mHelloTo);
-    } catch (JSONException e) {
-    }
     return result;
   }
 
   @Override
   protected void setConfig(JSONObject config) {
-    try {
-      if (config.has("HelloTo"))
-        this.mHelloTo = config.getString("HelloTo");
-    } catch (JSONException e) {
-    }
-
   }
 
   @Override
   protected JSONObject initialiseLatestResult() {
-    Util.appendLog( "initialiseLatestResult : " +msg);
     return null;
-  }
-
-  @Override
-  protected void onTimerEnabled() {
-    Util.appendLog( "onTimerEnabled : " +msg);
-
-  }
-
-  @Override
-  protected void onTimerDisabled() {
-    Util.appendLog( "onTimerDisabled : " +msg);
-
-  }
-  @Override
-  protected void onPause() {
-    Util.appendLog( "In onPause : " +msg);
   }
 }
